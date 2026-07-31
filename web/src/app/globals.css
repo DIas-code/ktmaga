@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/* Тема переключается вручную классом .dark на <html> (см. ThemeToggle). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: ui-sans-serif, "Segoe UI", system-ui, -apple-system, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "JetBrains Mono", Consolas,
+    "Liberation Mono", monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-50 font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+}
+
+/* ---------- Конспекты: типографика для markdown ---------- */
+
+.notes {
+  @apply text-[15px] leading-7 text-slate-700 dark:text-slate-300;
+}
+.notes > * + * {
+  @apply mt-4;
+}
+.notes h2 {
+  @apply mt-10 border-b border-slate-200 pb-2 text-xl font-semibold text-slate-900 dark:border-slate-800 dark:text-slate-50;
+}
+.notes h3 {
+  @apply mt-8 text-base font-semibold text-slate-900 dark:text-slate-50;
+}
+.notes h4 {
+  @apply mt-6 text-sm font-semibold tracking-wide text-slate-500 uppercase dark:text-slate-400;
+}
+.notes p {
+  @apply text-pretty;
+}
+.notes ul {
+  @apply list-disc space-y-1.5 pl-5 marker:text-slate-400;
+}
+.notes ol {
+  @apply list-decimal space-y-1.5 pl-5 marker:text-slate-400;
+}
+.notes li > ul,
+.notes li > ol {
+  @apply mt-1.5;
+}
+.notes a {
+  @apply font-medium text-sky-600 underline underline-offset-2 hover:text-sky-500 dark:text-sky-400;
+}
+.notes strong {
+  @apply font-semibold text-slate-900 dark:text-slate-100;
+}
+.notes blockquote {
+  @apply rounded-r-lg border-l-4 border-amber-400 bg-amber-50 px-4 py-3 text-slate-700 dark:bg-amber-500/10 dark:text-amber-100;
+}
+.notes blockquote > * + * {
+  @apply mt-2;
+}
+.notes hr {
+  @apply my-8 border-slate-200 dark:border-slate-800;
+}
+
+/* Инлайновый код */
+.notes :not(pre) > code {
+  @apply rounded border border-slate-200 bg-slate-100 px-1.5 py-0.5 font-mono text-[0.85em] text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200;
+}
+
+/* Блоки кода */
+.notes pre {
+  @apply overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 p-4 font-mono text-[13px] leading-6 text-slate-100;
+}
+.notes pre code {
+  @apply bg-transparent p-0 text-inherit;
+}
+
+/* Таблицы */
+.notes .table-wrap {
+  @apply overflow-x-auto;
+}
+.notes table {
+  @apply w-full min-w-[34rem] border-collapse text-sm;
+}
+.notes th {
+  @apply border-b-2 border-slate-300 px-3 py-2 text-left font-semibold text-slate-900 dark:border-slate-700 dark:text-slate-100;
+}
+.notes td {
+  @apply border-b border-slate-200 px-3 py-2 align-top dark:border-slate-800;
+}
+.notes tbody tr:hover {
+  @apply bg-slate-100/60 dark:bg-slate-900/60;
+}
+
+/* ---------- Подсветка синтаксиса (классы highlight.js) ---------- */
+
+.hljs-comment,
+.hljs-quote {
+  @apply text-slate-500 italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-doctag,
+.hljs-type,
+.hljs-name {
+  @apply text-violet-300;
+}
+.hljs-string,
+.hljs-attr,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  @apply text-emerald-300;
+}
+.hljs-number,
+.hljs-meta,
+.hljs-built_in,
+.hljs-variable,
+.hljs-template-variable {
+  @apply text-amber-200;
+}
+.hljs-title,
+.hljs-title.function_,
+.hljs-title.class_ {
+  @apply text-sky-300;
+}
+.hljs-deletion {
+  @apply text-rose-300;
+}
+.hljs-emphasis {
+  @apply italic;
+}
+.hljs-strong {
+  @apply font-semibold;
+}
