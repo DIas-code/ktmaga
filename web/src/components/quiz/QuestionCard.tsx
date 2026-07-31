@@ -3,6 +3,7 @@
 import type { AnswerMode, Question } from "@/lib/types";
 import { cx, difficultyClasses } from "@/lib/accent";
 import { difficultyLabel } from "@/lib/exam";
+import { questionLocation } from "@/lib/source";
 
 const LETTERS = ["A", "B", "C", "D", "E", "F"];
 
@@ -29,6 +30,8 @@ export default function QuestionCard({
   revealed,
   locked,
 }: Props) {
+  const location = questionLocation(question.id);
+
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 dark:border-slate-800 dark:bg-slate-900">
       <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
@@ -49,6 +52,18 @@ export default function QuestionCard({
           </span>
         )}
       </div>
+
+      {/* Откуда задание — чтобы можно было открыть исходник и сверить. */}
+      <p
+        className="mt-1.5 font-mono text-[11px] break-all text-slate-400 dark:text-slate-500"
+        title={
+          location.exact
+            ? "Задание найдено на этом скриншоте распознаванием текста"
+            : "Точный файл не установлен: при импорте он не сохранялся"
+        }
+      >
+        {location.exact ? location.path : `≈ ${location.path}`}
+      </p>
 
       {question.passage && (
         <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">

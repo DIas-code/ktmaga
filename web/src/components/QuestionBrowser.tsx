@@ -5,6 +5,7 @@ import type { Subject } from "@/lib/types";
 import { loadQuestions } from "@/content/client-banks";
 import { accentClasses, cx, difficultyClasses } from "@/lib/accent";
 import { LEVELS, difficultyLabel } from "@/lib/exam";
+import { questionLocation } from "@/lib/source";
 
 const PAGE = 25;
 const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
@@ -190,6 +191,12 @@ function Browser({ subject }: { subject: Subject }) {
                 </span>
                 <code className="ml-auto font-mono opacity-50">{item.id}</code>
               </div>
+
+              <p className="mt-1.5 font-mono text-[11px] break-all text-slate-400 dark:text-slate-500">
+                {questionLocation(item.id).exact
+                  ? questionLocation(item.id).path
+                  : `≈ ${questionLocation(item.id).path}`}
+              </p>
 
               {item.passage && (
                 <p className="mt-3 max-h-40 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs leading-relaxed whitespace-pre-line text-slate-600 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400">

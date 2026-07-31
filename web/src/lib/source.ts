@@ -1,3 +1,5 @@
+import { questionImages } from "@/content/question-images";
+
 /**
  * Происхождение задания.
  *
@@ -62,13 +64,34 @@ export function questionSource(id: string): QuestionSource {
 }
 
 /**
- * Точные скриншоты для отдельных заданий.
+ * Где искать задание в папке `Пробники`.
  *
- * Заполняется вручную по мере сверки: при импорте соответствие «задание →
- * файл» не сохранялось, поэтому каждую пару приходится устанавливать глазами.
- * Ключ — id задания, значение — путь внутри `public`.
+ * `exact` — путь ведёт к конкретному файлу-скриншоту: задание нашлось на нём
+ * распознаванием текста. Иначе указан документ или папка, откуда шёл импорт,
+ * потому что при массовом импорте номер строки не сохранялся.
  */
-export const questionImages: Record<string, string> = {};
+export interface QuestionLocation {
+  path: string;
+  exact: boolean;
+}
+
+/** Куда смотреть, если точный скриншот не найден. */
+const FALLBACK_PATH: Record<string, string> = {
+  ct: "Пробники/ (скриншоты пробников, файл не установлен)",
+  kb: "Пробники/Сливы бейба/Алгоритм-рус.docx, База_данных_ru.docx",
+  bk: "Пробники/Сливы бейба/*.docx, английскийПробники/*.pdf, тгопробники/*.pdf",
+  hi: "не из пробника (составлено)",
+};
+
+export function questionLocation(id: string): QuestionLocation {
+  const exact = questionImages[id];
+  if (exact) return { path: exact, exact: true };
+  const prefix = id.split("-")[0];
+  return {
+    path: FALLBACK_PATH[prefix] ?? "не из пробника (составлено по спецификации)",
+    exact: false,
+  };
+}
 
 export function questionImage(id: string): string | undefined {
   return questionImages[id];

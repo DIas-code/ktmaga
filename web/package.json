@@ -9,6 +9,7 @@
     "lint": "eslint",
     "check": "tsx --tsconfig tsconfig.json scripts/check-content.ts",
     "variants": "tsx --tsconfig tsconfig.json scripts/build-variants.ts",
+    "images": "tsx --tsconfig tsconfig.json scripts/build-question-images.ts",
     "coverage": "tsx --tsconfig tsconfig.json scripts/coverage.ts"
   },
   "dependencies": {
