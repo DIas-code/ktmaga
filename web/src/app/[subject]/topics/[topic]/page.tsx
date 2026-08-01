@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { getSubject, getTopic, getTopicQuestions, subjects } from "@/content";
 import { accentClasses, difficultyClasses } from "@/lib/accent";
 import { loadTheory } from "@/lib/theory";
-import Notes from "@/components/Notes";
+import TheoryBlocks from "@/components/TheoryBlocks";
 import MarkTopicRead from "@/components/MarkTopicRead";
 
 export function generateStaticParams() {
@@ -81,7 +81,13 @@ export default async function TopicPage(props: PageProps<"/[subject]/topics/[top
 
       <article className="mt-8">
         {theory ? (
-          <Notes markdown={theory} />
+          <TheoryBlocks
+            markdown={theory}
+            topicSlug={topic.slug}
+            topicTitle={topic.title}
+            showIndex
+            openFirst={false}
+          />
         ) : (
           <div className="rounded-2xl border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
             <p className="font-medium text-slate-700 dark:text-slate-300">

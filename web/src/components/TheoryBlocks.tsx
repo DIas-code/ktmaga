@@ -18,8 +18,16 @@ interface Props {
   topicSlug: string;
   /** Название темы для заголовка секции. */
   topicTitle: string;
-  /** Взвешенные куски задания: по ним блоки сортируются по релевантности. */
-  query: QueryPart[];
+  /**
+   * Взвешенные куски задания: по ним блоки сортируются по релевантности.
+   * Без запроса блоки идут в порядке конспекта — так нужно на странице темы,
+   * где нет «текущего вопроса» и порядок автора важнее.
+   */
+  query?: QueryPart[];
+  /** Показать список блоков сверху: по длинному конспекту иначе не сориентироваться. */
+  showIndex?: boolean;
+  /** Раскрыть первый блок. На странице темы это лишнее — там сверху оглавление. */
+  openFirst?: boolean;
 }
 
 /**
@@ -30,21 +38,30 @@ interface Props {
  * гуглить остальные. Самый близкий к вопросу блок раскрыт сразу, остальные
  * свёрнуты и открываются по клику.
  */
-export default function TheoryBlocks({ markdown, topicSlug, topicTitle, query }: Props) {
-  const blocks = useMemo(
-    () => rankTheoryBlocks(splitTheoryBlocks(markdown, topicSlug), query),
-    [markdown, topicSlug, query],
-  );
+export default function TheoryBlocks({
+  markdown,
+  topicSlug,
+  topicTitle,
+  query,
+  showIndex = false,
+  openFirst = true,
+}: Props) {
+  const blocks = useMemo(() => {
+    const split = splitTheoryBlocks(markdown, topicSlug);
+    return query ? rankTheoryBlocks(split, query) : split;
+  }, [markdown, topicSlug, query]);
 
   // Ключ вопроса в состоянии не хранится: при смене задания компонент
   // пересоздаётся по key извне, и раскрытие сбрасывается само.
   const [openIds, setOpenIds] = useState<Set<string>>(() =>
-    blocks.length > 0 ? new Set([blocks[0].id]) : new Set(),
+    openFirst && blocks.length > 0 ? new Set([blocks[0].id]) : new Set(),
   );
 
   if (blocks.length === 0) return null;
 
   const allOpen = openIds.size === blocks.length;
+  const open = (id: string) =>
+    setOpenIds((prev) => new Set(prev).add(id));
 
   const toggle = (id: string) =>
     setOpenIds((prev) => {
@@ -72,6 +89,36 @@ export default function TheoryBlocks({ markdown, topicSlug, topicTitle, query }:
         </button>
       </div>
 
+      {showIndex && (
+        <nav className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900/60">
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            Что есть в теме
+          </p>
+          <ul className="mt-2 flex flex-wrap gap-x-1 gap-y-1.5">
+            {blocks.map((block) => (
+              <li key={block.id}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    open(block.id);
+                    // Раскрытие происходит в том же кадре, поэтому прокрутка —
+                    // в следующем, когда блок уже занял высоту.
+                    requestAnimationFrame(() =>
+                      document
+                        .getElementById(block.id)
+                        ?.scrollIntoView({ block: "start", behavior: "smooth" }),
+                    );
+                  }}
+                  className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-xs transition hover:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500"
+                >
+                  {block.title}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+
       <ul className="mt-2 space-y-1.5">
         {blocks.map((block, i) => (
           <TheoryBlockItem
@@ -79,7 +126,7 @@ export default function TheoryBlocks({ markdown, topicSlug, topicTitle, query }:
             block={block}
             open={openIds.has(block.id)}
             onToggle={() => toggle(block.id)}
-            highlighted={i === 0}
+            highlighted={Boolean(query) && i === 0}
           />
         ))}
       </ul>
@@ -100,8 +147,9 @@ function TheoryBlockItem({
 }) {
   return (
     <li
+      id={block.id}
       className={cx(
-        "overflow-hidden rounded-xl border bg-white dark:bg-slate-900",
+        "scroll-mt-20 overflow-hidden rounded-xl border bg-white dark:bg-slate-900",
         highlighted
           ? "border-sky-300 dark:border-sky-500/40"
           : "border-slate-200 dark:border-slate-800",
