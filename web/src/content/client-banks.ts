@@ -12,29 +12,41 @@ import type { Question } from "@/lib/types";
  */
 const loaders: Record<string, () => Promise<Question[]>> = {
   algo: async () => {
-    const [{ algoMockQuestions }, { algoQuestions }, { algoBankQuestions }] =
+    const [{ algoMockQuestions }, { mockQuestions }, { algoQuestions }, { algoBankQuestions }] =
       await Promise.all([
         import("./algo/questions-mock"),
+        import("./algo/mock"),
         import("./algo/questions"),
         import("./algo/questions-bank"),
       ]);
-    return [...algoMockQuestions, ...algoQuestions, ...algoBankQuestions];
+    return [...algoMockQuestions, ...mockQuestions, ...algoQuestions, ...algoBankQuestions];
   },
   db: async () => {
-    const [{ dbQuestions }, { dbBankQuestions }] = await Promise.all([
+    const [{ mockQuestions }, { dbQuestions }, { dbBankQuestions }] = await Promise.all([
+      import("./db/mock"),
       import("./db/questions"),
       import("./db/questions-bank"),
     ]);
-    return [...dbQuestions, ...dbBankQuestions];
+    return [...mockQuestions, ...dbQuestions, ...dbBankQuestions];
   },
   english: async () => {
-    const [{ englishQuestions }, { englishBankQuestions }, { englishReadingQuestions }] =
-      await Promise.all([
+    const [
+      { mockQuestions },
+      { englishQuestions },
+      { englishBankQuestions },
+      { englishReadingQuestions },
+    ] = await Promise.all([
+        import("./english/mock"),
         import("./english/questions"),
         import("./english/questions-bank"),
         import("./english/questions-reading"),
       ]);
-    return [...englishQuestions, ...englishBankQuestions, ...englishReadingQuestions];
+    return [
+      ...mockQuestions,
+      ...englishQuestions,
+      ...englishBankQuestions,
+      ...englishReadingQuestions,
+    ];
   },
   readiness: async () => {
     const [{ readinessQuestions }, { readinessBankQuestions }] = await Promise.all([

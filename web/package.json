@@ -12,7 +12,8 @@
     "images": "tsx --tsconfig tsconfig.json scripts/build-question-images.ts",
     "prune": "tsx --tsconfig tsconfig.json scripts/prune-bank.ts",
     "coverage": "tsx --tsconfig tsconfig.json scripts/coverage.ts",
-    "trim": "tsx --tsconfig tsconfig.json scripts/trim-bank.ts"
+    "trim": "tsx --tsconfig tsconfig.json scripts/trim-bank.ts",
+    "assemble": "tsx --tsconfig tsconfig.json scripts/assemble-mock.ts"
   },
   "dependencies": {
     "highlight.js": "^11.11.1",

@@ -7,6 +7,9 @@ import { readinessSubject } from "./readiness/meta";
 import { dbQuestions } from "./db/questions";
 import { algoQuestions } from "./algo/questions";
 import { algoMockQuestions } from "./algo/questions-mock";
+import { mockQuestions as algoMockBatches } from "./algo/mock";
+import { mockQuestions as dbMockBatches } from "./db/mock";
+import { mockQuestions as englishMockBatches } from "./english/mock";
 import { dbBankQuestions } from "./db/questions-bank";
 import { algoBankQuestions } from "./algo/questions-bank";
 import { englishBankQuestions } from "./english/questions-bank";
@@ -29,12 +32,17 @@ export const subjects: Subject[] = [
 
 const questionBank: Record<string, Question[]> = {
   // Сначала задания с развёрнутым разбором, затем массово импортированные из банков
-  english: [...englishQuestions, ...englishBankQuestions, ...englishReadingQuestions],
-  readiness: [...readinessQuestions, ...readinessBankQuestions],
-  db: [...dbQuestions, ...dbBankQuestions],
   // Перенесённые из пробников вручную идут первыми: у них написан разбор,
   // и при дедупликации выживает именно такая версия задания.
-  algo: [...algoMockQuestions, ...algoQuestions, ...algoBankQuestions],
+  english: [
+    ...englishMockBatches,
+    ...englishQuestions,
+    ...englishBankQuestions,
+    ...englishReadingQuestions,
+  ],
+  readiness: [...readinessQuestions, ...readinessBankQuestions],
+  db: [...dbMockBatches, ...dbQuestions, ...dbBankQuestions],
+  algo: [...algoMockQuestions, ...algoMockBatches, ...algoQuestions, ...algoBankQuestions],
 };
 
 export function getSubject(slug: string): Subject | undefined {
