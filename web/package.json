@@ -11,7 +11,8 @@
     "variants": "tsx --tsconfig tsconfig.json scripts/build-variants.ts",
     "images": "tsx --tsconfig tsconfig.json scripts/build-question-images.ts",
     "prune": "tsx --tsconfig tsconfig.json scripts/prune-bank.ts",
-    "coverage": "tsx --tsconfig tsconfig.json scripts/coverage.ts"
+    "coverage": "tsx --tsconfig tsconfig.json scripts/coverage.ts",
+    "trim": "tsx --tsconfig tsconfig.json scripts/trim-bank.ts"
   },
   "dependencies": {
     "highlight.js": "^11.11.1",
@@ -34,4 +35,3 @@
     "typescript": "^5"
   }
 }
-
