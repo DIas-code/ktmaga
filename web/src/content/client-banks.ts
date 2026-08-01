@@ -12,11 +12,13 @@ import type { Question } from "@/lib/types";
  */
 const loaders: Record<string, () => Promise<Question[]>> = {
   algo: async () => {
-    const [{ algoQuestions }, { algoBankQuestions }] = await Promise.all([
-      import("./algo/questions"),
-      import("./algo/questions-bank"),
-    ]);
-    return [...algoQuestions, ...algoBankQuestions];
+    const [{ algoMockQuestions }, { algoQuestions }, { algoBankQuestions }] =
+      await Promise.all([
+        import("./algo/questions-mock"),
+        import("./algo/questions"),
+        import("./algo/questions-bank"),
+      ]);
+    return [...algoMockQuestions, ...algoQuestions, ...algoBankQuestions];
   },
   db: async () => {
     const [{ dbQuestions }, { dbBankQuestions }] = await Promise.all([

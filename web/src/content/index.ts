@@ -6,6 +6,7 @@ import { englishSubject } from "./english/meta";
 import { readinessSubject } from "./readiness/meta";
 import { dbQuestions } from "./db/questions";
 import { algoQuestions } from "./algo/questions";
+import { algoMockQuestions } from "./algo/questions-mock";
 import { dbBankQuestions } from "./db/questions-bank";
 import { algoBankQuestions } from "./algo/questions-bank";
 import { englishBankQuestions } from "./english/questions-bank";
@@ -31,7 +32,9 @@ const questionBank: Record<string, Question[]> = {
   english: [...englishQuestions, ...englishBankQuestions, ...englishReadingQuestions],
   readiness: [...readinessQuestions, ...readinessBankQuestions],
   db: [...dbQuestions, ...dbBankQuestions],
-  algo: [...algoQuestions, ...algoBankQuestions],
+  // Перенесённые из пробников вручную идут первыми: у них написан разбор,
+  // и при дедупликации выживает именно такая версия задания.
+  algo: [...algoMockQuestions, ...algoQuestions, ...algoBankQuestions],
 };
 
 export function getSubject(slug: string): Subject | undefined {
