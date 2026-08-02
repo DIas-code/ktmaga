@@ -1,4 +1,5 @@
 import { batch01 } from "./batch-01";
+import { batch02 } from "./batch-02";
 import type { Question } from "@/lib/types";
 
 /**
@@ -9,4 +10,5 @@ import type { Question } from "@/lib/types";
  */
 export const mockQuestions: Question[] = [
   ...batch01,
+  ...batch02,
 ];
