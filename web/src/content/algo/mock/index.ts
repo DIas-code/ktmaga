@@ -8,6 +8,7 @@ import { batch07 } from "./batch-07";
 import { batch08 } from "./batch-08";
 import { batch09 } from "./batch-09";
 import { batch10 } from "./batch-10";
+import { batch11 } from "./batch-11";
 import type { Question } from "@/lib/types";
 
 /**
@@ -27,4 +28,5 @@ export const mockQuestions: Question[] = [
   ...batch08,
   ...batch09,
   ...batch10,
+  ...batch11,
 ];
